@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Pour ma Valentine</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-color: #ffe6e6;
+            --container-bg: rgba(255, 255, 255, 0.9);
+            --text-color: #ff4d6d;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: var(--bg-color);
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden;
+            text-align: center;
+            transition: background-color 1.5s ease;
+            padding: 20px;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            opacity: 0;
+            animation: twinkle 2s infinite ease-in-out;
+            z-index: 1;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        .container {
+            background-color: var(--container-bg);
+            padding: 30px 20px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 400px; /* Taille max pour mobile */
+            transition: all 1s ease;
+        }
+
+        h1 {
+            font-family: 'Great Vibes', cursive;
+            color: var(--text-color);
+            font-size: 2.2rem; /* Réduit pour mobile */
+            margin: 15px 0;
+            transition: color 1s ease;
+            line-height: 1.2;
+        }
+
+        .gif-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+
+        .gif-container img {
+            width: 150px; /* Plus petit sur mobile */
+            height: 150px;
+            object-fit: contain;
+            border-radius: 15px;
+        }
+
+        .buttons {
+            display: flex;
+            flex-wrap: wrap; /* Permet aux boutons de s'empiler si besoin */
+            gap: 15px;
+            margin-top: 20px;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+
+        button {
+            border: none;
+            border-radius: 50px;
+            padding: 12px 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            font-family: 'Poppins', sans-serif;
+            touch-action: manipulation;
+        }
+
+        .btn-yes {
+            background-color: #2ecc71;
+            color: white;
+            box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+            z-index: 999;
+        }
+
+        .btn-no {
+            background-color: #e74c3c;
+            color: white;
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+        }
+
+        /* Classe spéciale pour le bouton géant */
+        .fullscreen-yes {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            font-size: 2.5rem !important; /* Ajusté pour pas que ça sorte de l'écran */
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            border-radius: 0 !important;
+            margin: 0 !important;
+            z-index: 9999 !important;
+        }
+
+        .heart {
+            position: fixed;
+            top: -20px;
+            font-size: 20px;
+            user-select: none;
+            z-index: 1000;
+            pointer-events: none;
+            animation: fall linear forwards;
+        }
+
+        @keyframes fall {
+            to { transform: translateY(105vh) rotate(360deg); }
+        }
+
+        .hidden { display: none !important; }
+
+        /* Ajustements pour très petits écrans */
+        @media (max-width: 350px) {
+            h1 { font-size: 1.8rem; }
+            .container { padding: 15px; }
+        }
+    </style>
+</head>
+<body>
+
+    <audio id="loveMusic" loop>
+        <source src="https://www.chosic.com/wp-content/uploads/2021/07/Rainy-Day-Background-Music.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="container" id="mainContainer">
+        <div class="gif-container">
+            <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHIyc3E3Z3BqZ3pnd3BqZ3pnd3BqZ3pnd3BqZ3pnd3BqZ3pnd3BqJmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1z/cLS1cfxvGOPVpf9g3y/giphy.gif" alt="Please" id="mainImage">
+        </div>
+
+        <h1 id="question">Veux-tu être ma Valentine Tania ? 💖</h1>
+
+        <div class="buttons">
+            <button class="btn-yes" id="yesBtn" onclick="acceptLove()">Oui</button>
+            <button class="btn-no" id="noBtn" onclick="refuseLove()">Non</button>
+        </div>
+    </div>
+
+    <script>
+        let fontSize = 1; 
+        let paddingVertical = 12;
+        let paddingHorizontal = 25;
+        let darkness = 0;
+        
+        const phrases = [
+            "Non",
+            "Tu es sûre ?",
+            "Ah ouais ?",
+            "Même pas un petit peu ?",
+            "Tu me brises le cœur 💔",
+            "Dernière chance !"
+        ];
+        
+        let phraseIndex = 0;
+
+        function createStar() {
+            const star = document.createElement('div');
+            star.className = 'star';
+            const size = Math.random() * 3 + 1 + "px";
+            star.style.width = size;
+            star.style.height = size;
+            star.style.top = Math.random() * 100 + "vh";
+            star.style.left = Math.random() * 100 + "vw";
+            document.body.appendChild(star);
+            setTimeout(() => { star.style.opacity = 1; }, 100);
+        }
+
+        function refuseLove() {
+            const noBtn = document.getElementById('noBtn');
+            const yesBtn = document.getElementById('yesBtn');
+            const container = document.getElementById('mainContainer');
+            const question = document.getElementById('question');
+
+            phraseIndex++;
+            if (phraseIndex < phrases.length) {
+                noBtn.innerText = phrases[phraseIndex];
+            } else {
+                noBtn.style.display = 'none';
+            }
+
+            // Croissance plus douce pour mobile
+            fontSize += 0.5; 
+            paddingVertical += 10;
+            paddingHorizontal += 15;
+            
+            yesBtn.style.fontSize = fontSize + "rem";
+            yesBtn.style.padding = `${paddingVertical}px ${paddingHorizontal}px`;
+
+            darkness += 15;
+            document.body.style.backgroundColor = `rgb(${255 - darkness*2}, ${230 - darkness*2.5}, ${230 - darkness*2})`;
+            
+            if (darkness > 40) {
+                document.body.style.backgroundColor = "#0a0612";
+                container.style.backgroundColor = "rgba(255, 255, 255, 0.1)";
+                container.style.backdropFilter = "blur(10px)";
+                question.style.color = "white";
+                for(let i=0; i<3; i++) createStar();
+            }
+
+            // Se déclenche plus tôt sur mobile pour éviter que le bouton sorte de la vue
+            if (fontSize > 4.5) {
+                yesBtn.classList.add('fullscreen-yes');
+                yesBtn.innerText = "Tu n'as pas le choix ! ❤️";
+                noBtn.style.display = "none";
+            }
+        }
+
+        function acceptLove() {
+            const question = document.getElementById('question');
+            const image = document.getElementById('mainImage');
+            const btnGroup = document.querySelector('.buttons');
+            const yesBtn = document.getElementById('yesBtn');
+            const audio = document.getElementById('loveMusic');
+
+            audio.play().catch(e => console.log("L'audio attend un clic"));
+
+            startHearts();
+
+            image.src = "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbmZid3pnd3BqZ3pnd3BqZ3pnd3BqZ3pnd3BqZ3pnd3BqZ3BqJmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1z/KztT2c4u8mYYUiMKdJ/giphy.gif"; 
+            
+            question.innerHTML = "Je t'aime Tania ! 💖🥰<br>Hâte d'être le 14 !";
+            question.style.color = "#ff4d6d";
+            
+            btnGroup.classList.add('hidden');
+            yesBtn.classList.add('hidden');
+            
+            if (darkness > 40) {
+                document.body.style.backgroundColor = "#1a0b1e";
+            } else {
+                document.body.style.backgroundColor = "#ffccd5";
+            }
+        }
+
+        function startHearts() {
+            const heartCount = window.innerWidth < 500 ? 40 : 80; // Moins de coeurs sur mobile pour la performance
+            for (let i = 0; i < heartCount; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.className = 'heart';
+                    heart.innerHTML = Math.random() > 0.5 ? '❤️' : '💖';
+                    heart.style.left = Math.random() * 100 + 'vw';
+                    heart.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                    heart.style.fontSize = (Math.random() * 15 + 15) + 'px';
+                    if(darkness > 40) heart.style.textShadow = "0 0 10px #ff4d6d";
+                    document.body.appendChild(heart);
+                    setTimeout(() => heart.remove(), 4000);
+                }, i * 150);
+            }
+        }
+    </script>
+</body>
+</html>
